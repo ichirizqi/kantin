@@ -1,0 +1,203 @@
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="css/bootstrap.css">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="css/all.css">
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css?family=Lora:400,700|Montserrat:200,400,600&display=swap"
+    rel="stylesheet">
+
+  <!-- My CSS -->
+  <link rel="stylesheet" href="css/style.css">
+
+
+  <title>Menu Pembayaran</title>
+</head>
+
+<body>
+  <div class="container cart-header">
+    <div class="row mt-5 text-center">
+      <div class="col">
+        <h3>Menu Pembayaran</h3>
+        <hr width="320px" color="#cda45e">
+        <p>Pastikan makanan anda terbayar lunas</p>
+        <p></p>
+        <br><br>
+      </div>
+    </div>
+  </div>
+
+  <!-- Checkout -->
+  <section class="checkout">
+    <div class="container">
+      <div class="row justify-content-between" style="margin-bottom: 100px;">
+        <div>
+
+          <h4 class="mb-4">Pesanan Anda</h4>
+            <div class="form-group row">
+              <label for="nama" class="col-sm-3 col-form-label" style="color:#B7B7B7;">Nama</label>
+              <div class="col-sm-9">
+                <input type="text" class="form-control" name="nama" id="nama"  value="">
+              </div>
+            </div>
+
+            <table class="table">
+              <thead style="background-color: #cda45e;">
+                <tr>
+                  <th scope="col">Pesanan</th>
+                  <th scope="col">Harga</th>
+                  <th scope="col">Jumlah</th>
+                  <th scope="col">Sub Harga</th>
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+              <tbody id="dataKeranjang">
+                
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th colspan="4" style="color:#B7B7B7;">Total Harga</th>
+                  <th colspan="2" style="color:#B7B7B7;" name="total" id="totalHarga">0</th>
+                </tr>
+              </tfoot>
+            </table>
+
+            <div class="form-group row">
+              <label for="metode" class="col-sm-3 col-form-label" style="color:#B7B7B7;">Metode Pembayaran</label>
+              <div class="col-sm-9">
+                <select class="form-control" name="metode" id="metode">
+                  <option value="CASH">CASH</option>
+                  <option value="OVO">OVO</option>
+                  <option value="GOPAY">GOPAY </option>
+                  <option value="DANA">DANA</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row mt-3">
+              <div class="col">
+                  <a href="beranda.html" type="button" class="btn btn-block"
+                    style="background-color: #EAEAEF; color: black;">Lanjut Belanja</a>
+                </form>
+              </div>
+              <div class="col">
+
+                <button class="btn btn-block" type="button" name="buttonCheckout" id="buttonCheckout"
+                  style="background-color: #cda45e; color: white;">Checkout</bitton>
+
+              </div>
+            </div>
+
+          </form>
+        </div>
+
+
+      </div>
+    </div>
+    </div>
+  </section>
+  <!-- Akhir Checkout -->
+
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+    crossorigin="anonymous"></script>
+  <script>
+  let idPembeli = localStorage.getItem("id_user")
+
+  // untuk menghapus data dari keranjang
+  function hapusKeranjang(id_menu){
+    $.ajax({ 
+      type: 'POST',
+      url: '../api/hapus.php',
+      data: {
+        id_menu : id_menu
+      },
+      success: function (response) {
+        if (response.success) {
+          alert("berhasil ")
+          location.replace("cart.html");
+        } else {
+          alert("gagal ")
+        }
+      }
+    });
+  }
+
+  // untuk mengambil data dari keranjang
+  function ambilDataKeranjang() {
+    $.ajax({
+        type: 'GET',
+        url: '../api/data_keranjang.php?id_pembeli='+idPembeli,
+        success: function (response) {
+          keranjang = response.data.keranjang
+          for (let i = 0; i < keranjang.length; i++) {
+            let html = `
+            <tr>
+              <td>
+                <h5 class="m-0" id="namaBarang" style="color:#B7B7B7;">${keranjang[i].nama_menu}</h5>
+              </td>
+              <td>
+                <p class="m-0" id="hargaBarang" style="color:#B7B7B7;">Rp. ${keranjang[i].harga}</p>
+              </td>
+              <td style="color:#B7B7B7;"><input id="jumlah" type="number" name="test" min="1"value="${keranjang[i].jumlah}" readonly></td>
+              <td>
+                <p class="m-0" id="subtotal" style="color:#B7B7B7;">Rp. ${keranjang[i].subtotal}</p>
+              </td>
+              <td><button class="badge badge-danger" onclick="hapusKeranjang(${keranjang[i].id_menu})">HAPUS</button></td>
+            </tr>`
+            
+            $("#dataKeranjang").append(html)
+          }
+          $("#nama").val(response.data.nama_pembeli)
+          $("#totalHarga").html("Rp. "+response.data.total)
+        }
+      })
+  }
+
+  // untuk memproses checkout
+  function prosesCheckout() {
+    let nama = $("#nama").val()
+    let metode = $("#metode option:selected").val()
+    $.ajax({
+      type: 'POST',
+      url: '../api/checkout.php',
+      data: {
+        id_pembeli: idPembeli,
+        nama : nama,
+        metode : metode
+      },
+      success: function (response) {
+        if (response.success) {
+          location.replace("nomor_pemesanan.html")
+        } else {
+          alert("gagal checkout gais")
+        }
+      }
+    });
+  }
+  
+  // ketika button checkout di klik akan memanggil fungsi untuk memproses checkout
+  $("#buttonCheckout").on("click", function () {prosesCheckout()})
+
+  // ketika pertama kali halaman ter load
+  $(function () {
+    // mengambil data keranjang
+    ambilDataKeranjang()
+  });
+  </script>
+  <script src="js/popper.min.js"></script>
+  <script src="js/bootstrap.js"></script>
+  <script src="js/all.js"></script>
+</body>
+
+</html>

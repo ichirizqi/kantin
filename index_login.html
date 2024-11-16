@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zxx">
+<head>
+	<title>Login Creative Land</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta charset="UTF-8" />
+	<link rel="stylesheet" href="Kantin UB/assets/css/login.css" type="text/css" media="all" />
+</head>
+
+<body>
+	<!-- /login-section -->
+
+	<section class="w3l-forms-23">
+		<div class="forms23-block-hny">
+			<div class="wrapper">
+				<h1>Selamat Datang!</h1>
+				<div class="d-grid forms23-grids">
+					<div class="form23">
+						<div class="main-bg">
+							<h6 class="sec-one"></h6>
+							<div class="speci-login first-look">
+								<img src="Kantin UB/gambar/icon/user.png" alt="" class="img-responsive">
+							</div>
+						</div>
+						<div class="bottom-content">
+							<form>
+								<input type="text" name="username" id="username" class="input-form" placeholder="Username"/>
+								<input type="password" name="password" id="password" class="input-form" placeholder="Password" />
+								<button type="button" class="loginhny-btn btn" id="prosesLogin">Login</button>
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="w3l-copy-right text-center">
+					<p>© 2020 Kelompok 4 All rights reserved | Design by
+						<a><target="_blank">Kelompok 4</a></p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+	<script>
+	$(function () {
+		$("#prosesLogin").on("click", function () {
+			let username = $("#username").val()
+			let password = $("#password").val()
+			$.ajax({
+				type: 'POST',
+				url: 'api/login.php',
+				data: {
+					username,
+					password
+				},
+				success: function (response) {
+					if (response.success) {
+						alert('Selamat, Anda berhasli login');
+						localStorage.setItem("id_user", response.data.id_user)
+						window.location.replace("Kantin%20UB/beranda.html");
+					} else {
+						alert('Maaf data yang Anda masukkan salah');
+					}
+				}
+			});
+		});
+	});
+	</script>
+</body>
+
+</html>	
