@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Login Creative Land</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta charset="UTF-8" />
+	<link rel="stylesheet" href="Kantin UB/assets/css/login.css" type="text/css" media="all" />
+</head>
+<body>
+    <section class="w3l-forms-23">
+		<div class="forms23-block-hny">
+			<div class="wrapper">
+				<div class="d-grid forms23-grids">
+					<div class="form23">
+						<div class="main-bg">
+							<h6 class="sec-one"></h6>
+							<div class="speci-login first-look">
+								<img src="Kantin UB/gambar/icon/user.png" alt="" class="img-responsive">
+							</div>
+						</div>
+						<div class="bottom-content">
+							<form id="registerForm">
+								<input type="text" name="nama" id="nama" class="input-form" placeholder="Nama"/>
+                                <input type="text" name="username" id="username" class="input-form" placeholder="Username"/>
+								<input type="password" name="password" id="password" class="input-form" placeholder="Password" />
+								<button type="submit" class="loginhny-btn btn">Daftar</button>
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="w3l-copy-right text-center">
+					<!-- <p>© 2020 Kelompok 4 All rights reserved | Design by
+						<a><target="_blank">Kelompok 4</a></p> -->
+					<p>Sudah punya akun? Silahkan 
+						<a href="../kantin/index.html">Login Disini!</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    <div id="responseMessage" style="margin-top: 20px;"></div>
+
+    <script>
+        $(function() {
+            // Handle form submission with AJAX
+            $("#registerForm").submit(function(event) {
+                event.preventDefault(); // Prevent default form submission
+
+                // Collect form data
+                var formData = {
+                    nama: $("#nama").val(),
+                    username: $("#username").val(),
+                    password: $("#password").val()
+                };
+
+                // Send AJAX request to register.php
+                $.ajax({
+                    url: 'api/register.php', // PHP script to handle registration
+                    type: 'POST',
+                    dataType: 'json',
+                    data: formData, // Sending form data
+                    success: function(response) {
+                        // Handle the response from PHP (JSON)
+                        if (response.success) {
+                            alert('Selamat, Anda akun anda berhasil didaftarkan');
+                            window.location.replace("Kantin%20UB/beranda.html");
+                        } else {
+                            alert('Maaf data yang Anda masukkan salah');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        $("#responseMessage").html('<p style="color: red;">Error: Could not register the user.</p>');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

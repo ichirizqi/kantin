@@ -85,7 +85,7 @@
 		<nav class="nav-menu d-none d-lg-block">
         <ul>
           <li class="active"><a href="beranda.html">Beranda</a></li>
-          <li class="book-a-table text-center"><a href="../index_login.html">Sign Out</a></li>
+          <li class="book-a-table text-center"><a href="../index.html">Sign Out</a></li>
         </ul>
       </nav>
 	</div>
@@ -113,9 +113,8 @@
 				<th scope="col" style="font-size:30px; color:	#4169E1;"><center><br><img src="gambar/pemesanan/sukses2.png" style="max-width:100%;"><br><br><center>YAYY!!
 					<p></p>
 					</th>
-				<tr>
-					<th scope="col"><center>Pesananmu sedang dalam proses memasak nih<br>
-						Ditunggu yaa...<br><br></center>
+				<tr id="nomor">
+					
 				</tr>
 				
 			</thead>
@@ -188,16 +187,33 @@
       <div class="copyright">
         &copy; Copyright <strong><span><a href="beranda.html">Cafetaria Creative Land UB</a></span></strong>. All Rights Reserved
       </div>
-      <div class="credits">
-        
-        Desain Oleh Kelompok 4 SI A</a>
-      </div>
     </div>
   </footer>
   <!-- End Footer -->
 
   <div class="back-to-top"><i class="bx bx-up-arrow-alt"></i></div>
   
+  <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+    crossorigin="anonymous"></script>
+  <script>
+    $(function () {
+      $.ajax({
+        type: 'GET',
+        url: '../api/nomor.php',
+        success: function (response) {
+          let no = response.data
+          
+            let html =
+            `<th scope="col"><center>Nomor pesananmu: ${no.id_pemesanan}<br>
+						Ditunggu yaa...<br><br></center>`
+            $("#nomor").append(html);
+          }
+        
+      })
+    });
+  </script>
+
+
   <script src="assets/vendor/jquery/jquery.min.js"></script>
   <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="assets/vendor/jquery.easing/jquery.easing.min.js"></script>

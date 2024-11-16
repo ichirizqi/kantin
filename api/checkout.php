@@ -4,14 +4,11 @@ include 'koneksi.php';
 
 try {
     $idPembeli = $_POST['id_pembeli'];
-    $nama = $_POST['nama'];
-    $metode = $_POST['metode'];
-
     
     mysqli_begin_transaction($koneksi);
     // 1. Insert data ke tabel pemesan lalu ambil IDnya
-    $insertPemesananQuery = mysqli_query($koneksi, "INSERT INTO pemesanan (id_pembeli, nama, metode) 
-    VALUES ('$idPembeli', '$nama', '$metode')");
+    $insertPemesananQuery = mysqli_query($koneksi, "INSERT INTO pemesanan (id_pembeli) 
+    VALUES ('$idPembeli')");
     $insertedPemesananId = mysqli_insert_id($koneksi);
     // mengambil data keranjang sesuai id pembeli : 
     
